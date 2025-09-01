@@ -1,0 +1,27 @@
+/* src/index.css */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+@import './styles/theme.css'; /* Импорт ваших переменных */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family, 'Nunito'), sans-serif;
+  background-color: var(--color-background, #f8f9fa);
+  color: var(--color-text-primary, #333);
+  /* Запрещаем пользователю масштабировать страницу */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  /* Улучшаем рендеринг шрифтов на мобильных */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Можно добавить стили для корневого элемента */
+#root {
+  min-height: 100vh;
+  min-height: 100dvh; /* Новое CSS-свойство для мобильных браузеров */
+}

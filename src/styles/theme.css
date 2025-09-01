@@ -1,0 +1,25 @@
+/* src/styles/theme.css */
+:root {
+  /* ЦВЕТА (названия по смыслу, а не по внешнему виду) */
+  --color-primary: #FF6B6B; /* Основной акцентный цвет (кнопки, выделения) */
+  --color-primary-light: #FF9E9E;
+  --color-background: #F8F9FA; /* Цвет фона */
+  --color-surface: #FFFFFF; /* Цвет "поверхностей" (карточек, панелей) */
+  --color-text-primary: #333333; /* Основной цвет текста */
+  --color-text-secondary: #767676; /* Второстепенный текст */
+
+  /* ТИПОГРАФИКА */
+  --font-family: 'Nunito', sans-serif; /* Дружелюбный, округлый шрифт */
+
+  /* РАЗМЕРЫ И ОТСТУПЫ */
+  --border-radius: 16px; /* Скругление углов карточек, кнопок */
+  --border-radius-sm: 8px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+
+  /* ТЕНИ */
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+

@@ -1,0 +1,16 @@
+/* Button.css */
+.button {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: none;
+  border-radius: var(--border-radius);
+  font-family: var(--font-family);
+  font-size: 1rem;
+  cursor: pointer;
+  /* Большая кнопка для пальцев! */
+  min-height: 44px;
+}
+
+.button--primary {
+  background-color: var(--color-primary);
+  color: white;
+}

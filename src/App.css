@@ -1,0 +1,22 @@
+/* src/App.css */
+.main-content {
+  padding: var(--spacing-lg, 24px);
+  max-width: 600px; /* Ограничиваем ширину на больших экранах */
+  margin: 0 auto; /* Центрируем контент */
+}
+
+.continue-button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  font-size: 18px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.continue-button:hover {
+  background-color: #45a049;
+}
