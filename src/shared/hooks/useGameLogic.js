@@ -1,5 +1,6 @@
 // src/shared/hooks/useGameLogic.js
 import { useState, useCallback, useMemo } from 'react';
+import { shuffleArray } from '../utils/array'; // Импортируем утилиту
 
 /**
  * Кастомный хук для управления логикой игр
@@ -61,6 +62,18 @@ export const useGameLogic = (questions) => {
     setScore(prevScore => Math.max(0, prevScore - points));
   }, []);
 
+  // Добавляем логику перемешивания ответов
+  const shuffledAnswers = useMemo(() => {
+    if (!currentQuestion) return [];
+    
+    const allAnswers = [
+      currentQuestion.correctAnswer,
+      ...currentQuestion.answers
+    ];
+    
+    return shuffleArray(allAnswers);
+  }, [currentQuestion]); // Перемешиваем при каждом новом вопросе
+
   // 5. Возвращаем объект со всем, что может понадобиться компоненту
   return {
     // СОСТОЯНИЕ ИГРЫ
@@ -70,6 +83,7 @@ export const useGameLogic = (questions) => {
     isCompleted,            // Завершена ли игра (true/false)
     correctAnswersCount,    // Количество правильных ответов
     totalQuestions,         // Общее количество вопросов
+    shuffledAnswers, // Добавляем перемешанные ответы
     
     // ВЫЧИСЛЯЕМЫЕ ЗНАЧЕНИЯ
     progress,               // Прогресс в процентах (0-100)

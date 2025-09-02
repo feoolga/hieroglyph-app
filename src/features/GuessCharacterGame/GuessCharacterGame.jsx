@@ -1,81 +1,54 @@
 import { useState, useEffect, useMemo } from 'react';
 import './GuessCharacterGame.css';
-import { basicCharacters } from '../../data/characters/basic.js';
+import { useGameLogic } from '../../shared/hooks/useGameLogic';
+import { generateGameData } from '../../shared/utils/game';
+// import { shuffleArray } from '../../shared/utils/array';
+import { basicCharacters } from '../../data/characters/basic';
 
 export const GuessCharacterGame = () => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  // Подготавливаем данные для игры
+  const gameData = useMemo(() => generateGameData(basicCharacters), []);
+  
+  // Используем наш кастомный хук
+  const {
+    currentIndex,
+    currentQuestion,
+    score,
+    isCompleted,
+    nextQuestion,
+    addScore,
+    progress,
+    isLastQuestion,
+    shuffledAnswers
+  } = useGameLogic(gameData);
+
+  // Локальное состояние для текущего вопроса
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
-  const [shuffledAnswers, setShuffledAnswers] = useState([]);
-  const [showContinue, setShowContinue] = useState(false);
-
-  // useMemo чтобы gameData не пересоздавался при каждом рендере
-
-    const shuffleArray = (array) => {
-    const newArray = [...array];
-    for (let i = newArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-    }
-    return newArray;
-  };
-  
-  const gameData = useMemo(() => {
-    // Оптимизированная версия - O(n) вместо O(n²)
-    const allCharacters = [...basicCharacters];
-    
-    return basicCharacters.map((character, index) => {
-      // Берем 3 случайных иероглифа из оставшихся
-      const otherCharacters = allCharacters.filter(c => c.id !== character.id);
-      const randomAnswers = shuffleArray(otherCharacters).slice(0, 3);
-      
-      return {
-        image: character.image,
-        correctAnswer: character.character,
-        answers: randomAnswers.map(c => c.character),
-        meaning: character.meaning
-      };
-    });
-  }, []); // Только один раз!
-
-  const currentQuestion = gameData[currentQuestionIndex];
-
-
-
-  // Убрал currentQuestion из зависимостей
-  useEffect(() => {
-    if (!currentQuestion) return; // Защита от undefined
-    
-    const allAnswers = [
-      currentQuestion.correctAnswer,
-      ...currentQuestion.answers
-    ];
-    
-    const shuffled = shuffleArray(allAnswers);
-    setShuffledAnswers(shuffled);
-  }, [currentQuestionIndex]); // Только при изменении индекса
+  const [showContinue, setShowContinue] = useState(false); // ← Добавил showContinue
 
   const handleAnswerSelect = (answer) => {
     if (isAnswered) return;
 
     setSelectedAnswer(answer);
     setIsAnswered(true);
-    setShowContinue(true);
+    setShowContinue(true); // ← Показываем кнопку продолжить
+    
+    // Используем функции из хука
+    if (answer === currentQuestion.correctAnswer) {
+      addScore(1); // Добавляем 1 очко за правильный ответ
+    }
   };
 
   const handleContinue = () => {
     setSelectedAnswer(null);
     setIsAnswered(false);
     setShowContinue(false);
-    setCurrentQuestionIndex((prevIndex) => (prevIndex + 1) % gameData.length);
+    nextQuestion(); // Используем функцию из хука
   };
 
-  // Упростил логирование
-  useEffect(() => {
-    console.log('Текущий вопрос:', currentQuestionIndex + 1);
-  }, [currentQuestionIndex]);
-
-  if (!currentQuestion) {
+  // Защита от undefined
+  if (!currentQuestion || !shuffledAnswers) {
     return <div>Загрузка...</div>;
   }
 
@@ -114,6 +87,12 @@ export const GuessCharacterGame = () => {
             </button>
           );
         })}
+      </div>
+
+      <div className="game-info">
+        <span>Вопрос {currentIndex + 1} из {gameData.length}</span>
+        <span>Счет: {score}</span>
+        <progress value={progress} max="100">{progress}%</progress>
       </div>
 
       {isAnswered && (
