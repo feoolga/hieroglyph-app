@@ -10,21 +10,8 @@ export const GuessCharacterGame = () => {
   const [showContinue, setShowContinue] = useState(false);
 
   // useMemo чтобы gameData не пересоздавался при каждом рендере
-  const gameData = useMemo(() => {
-    return basicCharacters.map(character => ({
-      image: character.image,
-      correctAnswer: character.character,
-      answers: basicCharacters
-        .filter(c => c.id !== character.id)
-        .map(c => c.character)
-        .slice(0, 3),
-      meaning: character.meaning
-    }));
-  }, []); // Зависимости пустые - создается один раз
 
-  const currentQuestion = gameData[currentQuestionIndex];
-
-  const shuffleArray = (array) => {
+    const shuffleArray = (array) => {
     const newArray = [...array];
     for (let i = newArray.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -32,6 +19,28 @@ export const GuessCharacterGame = () => {
     }
     return newArray;
   };
+  
+  const gameData = useMemo(() => {
+    // Оптимизированная версия - O(n) вместо O(n²)
+    const allCharacters = [...basicCharacters];
+    
+    return basicCharacters.map((character, index) => {
+      // Берем 3 случайных иероглифа из оставшихся
+      const otherCharacters = allCharacters.filter(c => c.id !== character.id);
+      const randomAnswers = shuffleArray(otherCharacters).slice(0, 3);
+      
+      return {
+        image: character.image,
+        correctAnswer: character.character,
+        answers: randomAnswers.map(c => c.character),
+        meaning: character.meaning
+      };
+    });
+  }, []); // Только один раз!
+
+  const currentQuestion = gameData[currentQuestionIndex];
+
+
 
   // Убрал currentQuestion из зависимостей
   useEffect(() => {

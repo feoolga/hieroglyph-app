@@ -1,9 +1,9 @@
 // App.jsx
 import { useState } from 'react';
-import { Header } from './components/Header';
-import { Button } from './components/Button';
-import { Card } from './components/Card';
-import { GuessCharacterGame } from './components/GuessCharacterGame/GuessCharacterGame';
+import { Header } from './shared/components/Header';
+import { Button } from './shared/components/Button';
+import { Card } from './shared/components/Card';
+import { GuessCharacterGame } from './features/GuessCharacterGame/GuessCharacterGame';
 import './App.css';
 
 function App() {
