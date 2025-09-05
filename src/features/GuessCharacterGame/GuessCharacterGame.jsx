@@ -8,6 +8,18 @@ import { basicCharacters } from '../../data/characters/basic';
 export const GuessCharacterGame = () => {
   // Подготавливаем данные для игры
   const gameData = useMemo(() => generateGameData(basicCharacters), []);
+
+  if (!basicCharacters  || basicCharacters .length === 0) {
+    return (
+      <div className="error-screen">
+        <h2>Ой! 🐼</h2>
+        <p>Иероглифы куда-то спрятались...</p>
+        <button onClick={() => window.location.reload()}>
+          Попробовать снова
+        </button>
+      </div>
+    );
+  }
   
   // Используем наш кастомный хук
   const {
